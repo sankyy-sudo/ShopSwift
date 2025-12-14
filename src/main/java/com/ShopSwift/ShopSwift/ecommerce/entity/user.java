@@ -1,4 +1,5 @@
 package com.ShopSwift.ShopSwift.ecommerce.entity;
+import com.ShopSwift.ShopSwift.ecommerce.enums.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
