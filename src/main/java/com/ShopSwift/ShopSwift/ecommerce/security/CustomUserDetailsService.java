@@ -1,7 +1,5 @@
 package com.ShopSwift.ShopSwift.ecommerce.security;
 
-
-
 import com.ShopSwift.ShopSwift.ecommerce.entity.User;
 import com.ShopSwift.ShopSwift.ecommerce.exception.NotFoundException;
 import com.ShopSwift.ShopSwift.ecommerce.repository.UserRepo;
@@ -16,12 +14,11 @@ import org.springframework.stereotype.Service;
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepo userRepo;
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         User user = userRepo.findByEmail(username)
-                .orElseThrow(() -> new NotFoundException("User/ Email Not found"));
+                .orElseThrow(()-> new NotFoundException("User/ Email Not found"));
 
         return AuthUser.builder()
                 .user(user)

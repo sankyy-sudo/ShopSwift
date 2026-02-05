@@ -1,5 +1,6 @@
 package com.ShopSwift.ShopSwift.ecommerce.dto;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -10,20 +11,17 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderItemDto {
 
     private Long id;
     private int quantity;
     private BigDecimal price;
-
-    // Flattened references (BEST PRACTICE)
-    private Long userId;
-    private Long productId;
-    private Long orderId;
-
+    private String  status;
+    private  UserDto user;
+    private ProductDto product;
     private LocalDateTime createdAt;
 }

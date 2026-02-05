@@ -9,50 +9,31 @@ import org.springframework.web.context.request.WebRequest;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    /**
-     * 1️⃣ Handle ALL uncaught exceptions
-     * Fallback handler
-     */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Response> handleAllException(
-            Exception ex,
-            WebRequest request) {
+    public ResponseEntity<Response> handleAllException(Exception ex, WebRequest request){
         Response errorResponse = Response.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .message(ex.getMessage())
                 .build();
-
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    /**
-     * 2️⃣ Handle NOT FOUND exceptions
-     */
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<Response> handleNotFoundException(
-            NotFoundException ex,
-            WebRequest request
-    ) {
+    public ResponseEntity<Response> handleNotFoundException(NotFoundException ex, WebRequest request){
         Response errorResponse = Response.builder()
                 .status(HttpStatus.NOT_FOUND.value())
                 .message(ex.getMessage())
                 .build();
-
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
-    /**
-     * 3️⃣ Handle INVALID CREDENTIALS exceptions
-     */
-    @ExceptionHandler(InvalidCredentialException.class)
-    public ResponseEntity<Response> handleInvalidCredentialException(
-            InvalidCredentialException ex,
-            WebRequest request) {
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<Response> handleInvalidCredentialsExceptionException(InvalidCredentialsException ex, WebRequest request){
         Response errorResponse = Response.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
                 .message(ex.getMessage())
                 .build();
-
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
 }

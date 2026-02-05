@@ -1,6 +1,7 @@
 package com.ShopSwift.ShopSwift.ecommerce.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.ShopSwift.ShopSwift.ecommerce.enums.UserRole;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,25 +15,29 @@ public class Response {
 
     private int status;
     private String message;
-    private LocalDateTime timestamp;
+    private final LocalDateTime timestamp = LocalDateTime.now();
 
-    // Auth
     private String token;
     private String role;
-    private String expirationTime;
+    private String  expirationTime;
 
-    // Pagination
     private int totalPage;
     private long totalElement;
 
-    // Single objects
     private AddressDto address;
-    private UserDto user;
-    private CategoryDto category;
-    private ProductDto product;
 
-    // Lists
+    private UserDto user;
     private List<UserDto> userList;
+
+    private CategoryDto category;
     private List<CategoryDto> categoryList;
+
+    private ProductDto product;
     private List<ProductDto> productList;
+
+    private OrderItemDto orderItem;
+    private List<OrderItemDto> orderItemList;
+
+    private OrderDto order;
+    private List<OrderDto> orderList;
 }

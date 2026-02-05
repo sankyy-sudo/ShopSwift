@@ -1,8 +1,8 @@
 package com.ShopSwift.ShopSwift.ecommerce.security;
 
+import com.ShopSwift.ShopSwift.ecommerce.entity.User;
 import lombok.Builder;
 import lombok.Data;
-import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,15 +14,14 @@ import java.util.List;
 @Builder
 public class AuthUser implements UserDetails {
 
-     private User user;
-
+    private User user;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(user.getRole().name()));
     }
 
     @Override
-    public @Nullable String getPassword() {
+    public String getPassword() {
         return user.getPassword();
     }
 
@@ -45,6 +44,7 @@ public class AuthUser implements UserDetails {
     public boolean isCredentialsNonExpired() {
         return true;
     }
+
     @Override
     public boolean isEnabled() {
         return true;

@@ -1,26 +1,27 @@
 package com.ShopSwift.ShopSwift.ecommerce.dto;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDto {
 
     private Long id;
-    private String name;
     private String email;
+    private String name;
     private String phoneNumber;
-
-    // role as STRING (ADMIN / USER)
+    private String password;
     private String role;
-
-    // FLAT reference (CORRECT)
-    private Long addressId;
+    private List<OrderItemDto> orderItemList;
+    private AddressDto address;
 }
