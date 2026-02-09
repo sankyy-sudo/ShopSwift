@@ -19,25 +19,30 @@ import java.util.function.Function;
 @Slf4j
 public class JwtUtils {
 
+    // Token validity: 6 months
+    private static final long EXPIRATION_TIME_IN_MILLISEC =
+            1000L * 60L * 60L * 24L * 30L * 6L;
 
-    private static final long EXPIRATION_TIME_IN_MILLISEC = 1000L * 60L *60L *24L * 30L * 6L; //expirers 6 months
     private SecretKey key;
 
-    @Value("${secreteJwtString}")
-    private String secreteJwtString; //Make sure the value in the application properties is 32characters or long
+    // ✅ FIXED property name (no typo)
+    @Value("${secretJwtString}")
+    private String secretJwtString;
 
+    // Initialize secret key after properties are injected
     @PostConstruct
-    private void init(){
-        byte[] keyBytes = secreteJwtString.getBytes(StandardCharsets.UTF_8);
+    private void init() {
+        byte[] keyBytes = secretJwtString.getBytes(StandardCharsets.UTF_8);
         this.key = new SecretKeySpec(keyBytes, "HmacSHA256");
     }
 
-    public String generateToken(User user){
-        String username = user.getEmail();
-        return generateToken(username);
+    // Generate token using User entity
+    public String generateToken(User user) {
+        return generateToken(user.getEmail());
     }
 
-    public String generateToken(String username){
+    // Generate token using username/email
+    public String generateToken(String username) {
         return Jwts.builder()
                 .subject(username)
                 .issuedAt(new Date(System.currentTimeMillis()))
@@ -46,22 +51,29 @@ public class JwtUtils {
                 .compact();
     }
 
-    public String getUsernameFromToken(String token){
-        return extractClaims(token, Claims::getSubject);
+    // Extract username/email from token
+    public String getUsernameFromToken(String token) {
+        return extractClaim(token, Claims::getSubject);
     }
 
-    private <T> T extractClaims(String token, Function<Claims, T> claimsTFunction){
-        return claimsTFunction.apply(Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload());
-    }
-
-    public boolean isTokenValid(String token, UserDetails userDetails){
+    // Validate token
+    public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
-    private boolean isTokenExpired(String token){
-        return extractClaims(token, Claims::getExpiration).before(new Date());
+    // Check token expiration
+    private boolean isTokenExpired(String token) {
+        return extractClaim(token, Claims::getExpiration).before(new Date());
     }
 
-
+    // Generic claim extractor
+    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        Claims claims = Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return claimsResolver.apply(claims);
+    }
 }

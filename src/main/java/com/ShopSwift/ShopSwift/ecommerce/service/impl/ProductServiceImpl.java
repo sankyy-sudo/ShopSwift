@@ -9,7 +9,6 @@ import com.ShopSwift.ShopSwift.ecommerce.exception.NotFoundException;
 import com.ShopSwift.ShopSwift.ecommerce.mapper.EntityDtoMapper;
 import com.ShopSwift.ShopSwift.ecommerce.repository.CategoryRepo;
 import com.ShopSwift.ShopSwift.ecommerce.repository.ProductRepo;
-import com.ShopSwift.ShopSwift.ecommerce.service.AwsS3Service;
 import com.ShopSwift.ShopSwift.ecommerce.service.interf.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,21 +28,21 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepo productRepo;
     private final CategoryRepo categoryRepo;
     private final EntityDtoMapper entityDtoMapper;
-    private final AwsS3Service awsS3Service;
+
 
 
 
     @Override
     public Response createProduct(Long categoryId, MultipartFile image, String name, String description, BigDecimal price) {
         Category category = categoryRepo.findById(categoryId).orElseThrow(()-> new NotFoundException("Category not found"));
-        String productImageUrl = awsS3Service.saveImageToS3(image);
+
 
         Product product = new Product();
         product.setCategory(category);
         product.setPrice(price);
         product.setName(name);
         product.setDescription(description);
-        product.setImageUrl(productImageUrl);
+
 
         productRepo.save(product);
         return Response.builder()
@@ -62,9 +61,7 @@ public class ProductServiceImpl implements ProductService {
         if(categoryId != null ){
             category = categoryRepo.findById(categoryId).orElseThrow(()-> new NotFoundException("Category not found"));
         }
-        if (image != null && !image.isEmpty()){
-            productImageUrl = awsS3Service.saveImageToS3(image);
-        }
+
 
         if (category != null) product.setCategory(category);
         if (name != null) product.setName(name);
